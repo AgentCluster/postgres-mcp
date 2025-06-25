@@ -108,17 +108,22 @@ async def list_schemas() -> ResponseType:
 @mcp.tool(description="Kararlar birleşik tablosunda tam metin araması yapar.")
 async def search_kararlar(
     user_query: str = Field(description="Arama sorgusu."),
-    limit: int = Field(description="Döndürülecek maksimum sonuç sayısı.", default=10),
+    limit: int = Field(description="Döndürülecek maksimum sonuç sayısı.", default=5), # Varsayılan limit 5 olarak güncellendi
 ) -> ResponseType:
     """
-    kararlar_birlesik tablosunda Türkçe tam metin araması yapar.
+    kararlar_birlesik tablosunda, belirtilen kolonları seçerek Türkçe tam metin araması yapar.
     """
     try:
         sql_driver = await get_sql_driver()
-        # Psycopg 3, parametreler için %s kullanır.
+        # Sorgu, sadece istenen kolonları ve alaka puanını seçecek şekilde güncellendi.
         query = """
         SELECT
-            *,
+            karar_no,
+            karar_tarihi,
+            daire,
+            esas_no,
+            durum,
+            data_text,
             ts_rank_cd(b.fts_vector, websearch_to_tsquery('turkish', %s)) as alaka_puani
         FROM kararlar_birlesik b
         WHERE b.fts_vector @@ websearch_to_tsquery('turkish', %s)
