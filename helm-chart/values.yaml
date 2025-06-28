@@ -55,7 +55,7 @@ ingress:
     - host: postgres.mcp.avukat.cloud
       paths:
         - path: /
-          pathType: Prefix
+          pathType: ImplementationSpecific
           port: 8000
   tls: []
   #  - secretName: chart-example-tls
