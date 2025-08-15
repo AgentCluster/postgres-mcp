@@ -52,7 +52,7 @@ jobs:
     - name: Set up Kubeconfig
       run: |
         kubectl config set-cluster k8s \
-          --server=https://34.12.147.41:6443 \
+          --server=https://34.141.217.32:6443 \
           --insecure-skip-tls-verify=true
         kubectl config set-credentials github-deployer --token=${{ secrets.K8S_TOKEN }}
         kubectl config set-context default --cluster=k8s --user=github-deployer --namespace=default
